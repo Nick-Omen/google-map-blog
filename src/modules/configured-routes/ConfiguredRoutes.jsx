@@ -2,15 +2,15 @@ import React from 'react';
 import { Redirect, Switch } from 'react-router-dom';
 import { Router } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
-import Home from '../../modules/home';
 import AuthRedirect from './AuthRedirect'
+import { PlacesList } from '../places'
 
 const routeConfigs = [
   {
     path: '/',
     pageTitle: 'Explore my world',
     exact: true,
-    component: Home,
+    component: PlacesList,
     requiresLogin: false,
   },
 ];

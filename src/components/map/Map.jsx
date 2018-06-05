@@ -1,7 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classes from './Map.css';
-import MapLib from './map';
+import MapLib from './map-lib';
+import classnames from 'classnames';
 import { GOOGLE_MAP_API_KEY } from '../../const';
+import { Place } from '../../models/places';
 
 const map = new MapLib();
 
@@ -10,12 +13,17 @@ window['initMap'] = () => {
 };
 
 export default class Map extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+    places: PropTypes.arrayOf(PropTypes.shape(Place)),
+  };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      mapLoaded: false
+      mapLoaded: false,
+      placesDrawn: false
     };
 
     this.onMapLoaded = this.onMapLoaded.bind(this);
@@ -33,6 +41,30 @@ export default class Map extends React.Component {
     script.src = src;
   }
 
+  static drawPlaces(places) {
+    if (map.isInitialized() && places && places.length > 0) {
+      map.drawMarkers(places.map(p => ({
+        id: p.id,
+        latLng: {
+          lat: p.latitude,
+          lng: p.longitude
+        }
+      })));
+      return true;
+    }
+  }
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const isDrawn = Map.drawPlaces(nextProps.places);
+
+    if (isDrawn) {
+      return {
+        placesDrawn: true
+      };
+    }
+    return null;
+  }
+
   onMapLoaded() {
     this.setState({
       mapLoaded: true
@@ -42,6 +74,7 @@ export default class Map extends React.Component {
 
   initializeMap() {
     map.render(this.refs['map']);
+    Map.drawPlaces(this.props.places);
   }
 
   shouldComponentUpdate(nextProps, nextState) {
@@ -49,6 +82,7 @@ export default class Map extends React.Component {
   }
 
   render() {
+    const { className } = this.props;
     const { mapLoaded } = this.state;
 
     if (!mapLoaded) {
@@ -56,7 +90,7 @@ export default class Map extends React.Component {
     }
 
     return (
-      <div className={classes.map} ref="map">Map</div>
+      <div className={classnames(classes.map, className)} ref="map">Map</div>
     );
   }
 }

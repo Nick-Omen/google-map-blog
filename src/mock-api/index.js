@@ -1,17 +1,10 @@
+import placesData from './places-data';
+
 export default options => {
   switch (options.url) {
+    case '/places/':
+      return placesData;
     default:
-      if (/^\/country\/\w+\//g.test(options.url)) {
-        return {
-          data: {
-            area: 100000,
-            population: 170000,
-            places_visited: 10,
-            articles: 3
-          },
-          message: ''
-        };
-      }
       return {
         data: {},
         message: ''

@@ -1,54 +1,39 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Map from '../../components/map/Map';
-import classes from './Home.css';
+import { fetchPlaces } from '../../reducers/places';
+import { Place } from '../../models/places';
 
 class Home extends React.Component {
+  static propTypes = {
+    places: PropTypes.arrayOf(PropTypes.shape(Place)),
+
+    className: PropTypes.string.isRequired,
+    getPlaces: PropTypes.func,
+  };
 
   constructor(props) {
     super(props);
 
-    this.state = {
-      windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight,
-    };
-
-    this.onWindowResize = this.onWindowResize.bind(this);
-    this.enableWindowListener();
-  }
-
-  onWindowResize() {
-    this.setState({
-      windowWidth: window.innerWidth,
-      windowHeight: window.innerHeight,
-    });
-  }
-
-  enableWindowListener() {
-    window.addEventListener('resize', this.onWindowResize);
-  }
-
-  disableWindowListener() {
-    window.removeEventListener('resize', this.onWindowResize);
-  }
-
-  componentWillUnmount() {
-    this.disableWindowListener();
+    this.props.getPlaces();
   }
 
   render() {
-    const { windowWidth, windowHeight } = this.state;
+    const { className, places } = this.props;
 
     return (
-      <div className={classes.container} style={{ width: windowWidth, height: windowHeight }}>
-        <Map />
-      </div>
+      <Map className={className} places={places} />
     );
   }
 }
 
-const mapStateToProps = state => ({});
+const mapStateToProps = state => ({
+  places: state.places.list
+});
 
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  getPlaces: () => dispatch(fetchPlaces())
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
