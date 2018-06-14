@@ -1,9 +1,13 @@
-import './marker-cluster';
+import { MarkerClusterer } from './marker-cluster';
 
-/* global google, MarkerClusterer */
+/* global google, Cluster */
+
+MarkerClusterer.IMAGE_PATH = process.env.PUBLIC_URL + 'cluster-images/m';
 
 export default class MapLib {
   onInit = () => {
+  };
+  visibleMarkersChanged = () => {
   };
   mapNode = null;
   map = null;
@@ -27,12 +31,37 @@ export default class MapLib {
           lat: 42.831984, lng: 74.6104193
         }
       });
+
+    this._enableZoomListener();
+    this._enableDragEndListener();
   }
 
-  fitToMarkers() {
+  _enableZoomListener() {
+    google.maps.event.addListener(this.map, 'zoom_changed', this._visibleMarkesChanged.bind(this));
+  }
+
+  _enableDragEndListener() {
+    google.maps.event.addListener(this.map, 'dragend', this._visibleMarkesChanged.bind(this));
+  }
+
+  _visibleMarkesChanged() {
+    const mapBounds = this.map.getBounds();
+    const markers = this.markers.filter(m => mapBounds.contains(m.getPosition()));
+    this.visibleMarkersChanged(markers);
+  }
+
+  _fitToMarkers(markers = null) {
+    if (!markers) {
+      markers = this.markers;
+    }
     const latLngBounds = new google.maps.LatLngBounds();
-    this.markers.forEach(m => latLngBounds.extend(m.getPosition()));
+    markers.forEach(m => latLngBounds.extend(m.getPosition()));
     this.map.fitBounds(latLngBounds);
+  }
+
+  _onClusterClick(c) {
+    const markers = c.getMarkers();
+    this._fitToMarkers(markers);
   }
 
   drawMarkers(markers) {
@@ -43,12 +72,13 @@ export default class MapLib {
       this.markers.push(new google.maps.Marker({
         position: m.latLng,
         map: this.map,
-        title: 'Hello World!'
+        id: m.id
       }));
     });
-    this.clusters = new MarkerClusterer(this.map, this.markers,
-      { imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m' });
-
-    this.fitToMarkers();
+    this.clusters = new MarkerClusterer(this.map, this.markers, {
+      zoomOnClick: false
+    });
+    google.maps.event.addListener(this.clusters, 'click', this._onClusterClick.bind(this));
+    this.clusters.fitMapToMarkers();
   }
 }

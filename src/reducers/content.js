@@ -1,7 +1,7 @@
 import { createReducer, createAction } from 'redux-act';
 
 const initialState = {
-  hidden: true
+  hidden: false
 };
 
 export const showContentAction = createAction('Show content');
@@ -13,6 +13,6 @@ export default createReducer({
     hidden: false
   }),
   [hideContentAction]: state => ({
-    hidden: true
+    hidden: false
   }),
 }, initialState);

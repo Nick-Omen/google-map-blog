@@ -16,6 +16,8 @@ export default class Map extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     places: PropTypes.arrayOf(PropTypes.shape(Place)),
+
+    showArticles: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -30,6 +32,7 @@ export default class Map extends React.Component {
     this.initializeMap = this.initializeMap.bind(this);
 
     map.onInit = this.onMapLoaded.bind(this);
+    map.visibleMarkersChanged = this.visibleMarkersChanged.bind(this);
 
     Map.loadMap();
   }
@@ -70,6 +73,10 @@ export default class Map extends React.Component {
       mapLoaded: true
     });
     setTimeout(this.initializeMap, 0);
+  }
+
+  visibleMarkersChanged(markers) {
+    this.props.showArticles(markers.map(m => m.id));
   }
 
   initializeMap() {

@@ -23,7 +23,7 @@ export default class ConfiguredRoutes extends React.Component {
     return (
       <Router history={browserHistory}>
         <Switch>
-          {
+            {
             routeConfigs.map(routeConfig => (
               <AuthRedirect
                 key={routeConfig.path}
