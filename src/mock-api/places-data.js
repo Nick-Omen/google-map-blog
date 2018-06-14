@@ -71,4 +71,24 @@ export default [
     latitude: 15.5988098,
     longitude: 73.7472926,
   },
+  {
+    id: 8,
+    type: 'article',
+    title: 'India #3',
+    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
+    photo: null,
+    latitude: 15.612509,
+    longitude: 73.765694,
+  },
+  {
+    id: 9,
+    type: 'photo',
+    title: 'India #4',
+    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
+    photo: null,
+    latitude: 15.5982098,
+    longitude: 73.7432926,
+  },
 ];

@@ -2,9 +2,11 @@
   position: fixed;
   top: 0;
   right: 0;
-  width: 25%;
+  width: 34%;
   height: 100%;
   background: #fff;
+  overflow: auto;
+  padding-right: 10px;
 }
 
 .isHidden {

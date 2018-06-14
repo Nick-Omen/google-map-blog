@@ -5,8 +5,14 @@ import MapLib from './map-lib';
 import classnames from 'classnames';
 import { GOOGLE_MAP_API_KEY } from '../../const';
 import { Place } from '../../models/places';
+import article from './assets/article.svg';
+import photo from './assets/photo.svg';
 
 const map = new MapLib();
+const GET_IMAGE_PATH = {
+  'photo': () => photo,
+  'article': () => article,
+};
 
 window['initMap'] = () => {
   map.init();
@@ -51,7 +57,8 @@ export default class Map extends React.Component {
         latLng: {
           lat: p.latitude,
           lng: p.longitude
-        }
+        },
+        iconPath: GET_IMAGE_PATH[p.type]()
       })));
       return true;
     }

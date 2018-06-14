@@ -69,11 +69,19 @@ export default class MapLib {
       throw new Error('Map is not initialized.');
     }
     markers.forEach(m => {
-      this.markers.push(new google.maps.Marker({
+      const icon = new google.maps.MarkerImage(
+        m.iconPath,
+        new google.maps.Size(512, 512),
+        new google.maps.Point(0, 0),
+        new google.maps.Point(50, 50),
+        new google.maps.Size(50, 50));
+      const marker = new google.maps.Marker({
         position: m.latLng,
         map: this.map,
-        id: m.id
-      }));
+        id: m.id,
+        icon: icon
+      });
+      this.markers.push(marker);
     });
     this.clusters = new MarkerClusterer(this.map, this.markers, {
       zoomOnClick: false

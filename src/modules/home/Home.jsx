@@ -35,7 +35,7 @@ class Home extends React.Component {
 
     return (
       <div className={className}>
-        <Map className={classnames(classes.map, {[classes.map75percent]: !contentHidden})} places={places} showArticles={this.showArticles} />
+        <Map className={classnames(classes.map, {[classes.mapToContent]: !contentHidden})} places={places} showArticles={this.showArticles} />
       </div>
     );
   }

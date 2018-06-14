@@ -5,7 +5,14 @@ import { Place } from '../../models/places';
 
 const PlaceItem = props => (
   <li>
-    {props.title}
+    <article>
+      <h3>
+        {props.title}
+      </h3>
+      <p>
+        {props.short_article}
+      </p>
+    </article>
   </li>
 );
 
