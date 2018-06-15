@@ -1,0 +1,32 @@
+.article {
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.thumbnail {
+  max-width: 180px;
+  flex: 0 1 180px;
+  height: 135px;
+  background: #dedede center/cover no-repeat;
+}
+
+.content {
+  flex: 1 1 0;
+  padding-left: 15px;
+}
+
+.title {
+  margin: 0 0 10px;
+}
+
+.description {
+  margin: 0 0 10px;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+.button {
+
+}

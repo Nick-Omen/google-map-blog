@@ -6,8 +6,8 @@ export const Place = {
     'photo', 'article'
   ]),
   title: PropTypes.string,
-  short_article: PropTypes.string,
-  photo: PropTypes.string,
+  description_short: PropTypes.string,
+  thumbnail: PropTypes.string,
   latitude: PropTypes.number,
   longitude: PropTypes.number,
 };

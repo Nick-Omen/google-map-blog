@@ -3,9 +3,9 @@ export default [
     id: 1,
     type: 'photo',
     title: 'Bishkek #1',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/800/600',
     latitude: 42.8320881,
     longitude: 74.5781538,
   },
@@ -13,9 +13,9 @@ export default [
     id: 2,
     type: 'photo',
     title: 'Bishkek #2',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/360/480',
     latitude: 42.8746306,
     longitude: 74.6234448,
   },
@@ -23,9 +23,9 @@ export default [
     id: 3,
     type: 'article',
     title: 'Bishkek #3',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/480/360',
     latitude: 42.8320881,
     longitude: 74.6234448,
   },
@@ -34,9 +34,9 @@ export default [
     id: 4,
     type: 'article',
     title: 'Moscow #1',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: null,
     latitude: 55.7292894,
     longitude: 37.665094,
   },
@@ -44,9 +44,9 @@ export default [
     id: 5,
     type: 'photo',
     title: 'Moscow #2',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/1000/1000',
     latitude: 55.7710865,
     longitude: 37.7033514,
   },
@@ -55,9 +55,9 @@ export default [
     id: 6,
     type: 'article',
     title: 'India #1',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/1280/720',
     latitude: 15.615509,
     longitude: 73.768694,
   },
@@ -65,9 +65,9 @@ export default [
     id: 7,
     type: 'photo',
     title: 'India #2',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/1280/720',
     latitude: 15.5988098,
     longitude: 73.7472926,
   },
@@ -75,9 +75,9 @@ export default [
     id: 8,
     type: 'article',
     title: 'India #3',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/200/200',
     latitude: 15.612509,
     longitude: 73.765694,
   },
@@ -85,9 +85,9 @@ export default [
     id: 9,
     type: 'photo',
     title: 'India #4',
-    short_article: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
+    description_short: 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. ' +
     'Ab cupiditate maiores quisquam. Amet assumenda exercitationem illum in natus saepe soluta?',
-    photo: null,
+    thumbnail: 'https://picsum.photos/200/200',
     latitude: 15.5982098,
     longitude: 73.7432926,
   },

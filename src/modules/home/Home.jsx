@@ -7,6 +7,7 @@ import { showContentAction } from '../../reducers/content';
 import { Place } from '../../models/places';
 import classes from './Home.css';
 import classnames from 'classnames';
+import deepEqual from 'deep-equal';
 
 class Home extends React.Component {
   static propTypes = {
@@ -21,13 +22,38 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
 
+    this.state = {
+      toggle: props.map.toggle,
+      center: props.map.center,
+    };
     this.props.getPlaces();
     this.showArticles = this.showArticles.bind(this);
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const newState = {};
+    if (!deepEqual(props.map.toggle, state.toggle)) {
+      newState['toggle'] = props.map.toggle;
+    }
+    if (!deepEqual(props.map.center, state.center)) {
+      newState['center'] = props.map.center;
+    }
+    return newState;
+  }
+
   showArticles(articleIds) {
-    console.log(articleIds);
     this.props.showArticles(articleIds);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.map) {
+      if (!deepEqual(prevProps.map.toggle, this.state.toggle)) {
+        this.map.toggleMarkerById(this.props.map.toggle.id);
+      }
+      if (!deepEqual(prevProps.map.center, this.state.center)) {
+        this.map.centerMap(this.props.map.center.latLng);
+      }
+    }
   }
 
   render() {
@@ -35,7 +61,10 @@ class Home extends React.Component {
 
     return (
       <div className={className}>
-        <Map className={classnames(classes.map, {[classes.mapToContent]: !contentHidden})} places={places} showArticles={this.showArticles} />
+        <Map className={classnames(classes.map, {[classes.mapToContent]: !contentHidden})}
+             places={places}
+             onRef={ref => (this.map = ref)}
+             showArticles={this.showArticles} />
       </div>
     );
   }
@@ -44,6 +73,7 @@ class Home extends React.Component {
 const mapStateToProps = state => ({
   places: state.places.list,
   contentHidden: state.content.hidden,
+  map: state.map
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -1,1 +1,1 @@
-export { default as PlacesList } from './List.jsx';
+export { default } from './List.jsx';

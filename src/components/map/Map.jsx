@@ -5,14 +5,8 @@ import MapLib from './map-lib';
 import classnames from 'classnames';
 import { GOOGLE_MAP_API_KEY } from '../../const';
 import { Place } from '../../models/places';
-import article from './assets/article.svg';
-import photo from './assets/photo.svg';
 
 const map = new MapLib();
-const GET_IMAGE_PATH = {
-  'photo': () => photo,
-  'article': () => article,
-};
 
 window['initMap'] = () => {
   map.init();
@@ -23,7 +17,8 @@ export default class Map extends React.Component {
     className: PropTypes.string,
     places: PropTypes.arrayOf(PropTypes.shape(Place)),
 
-    showArticles: PropTypes.func.isRequired
+    showArticles: PropTypes.func.isRequired,
+    onRef: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -31,7 +26,7 @@ export default class Map extends React.Component {
 
     this.state = {
       mapLoaded: false,
-      placesDrawn: false
+      placesIds: []
     };
 
     this.onMapLoaded = this.onMapLoaded.bind(this);
@@ -41,6 +36,7 @@ export default class Map extends React.Component {
     map.visibleMarkersChanged = this.visibleMarkersChanged.bind(this);
 
     Map.loadMap();
+    this.props.onRef(this);
   }
 
   static loadMap() {
@@ -52,19 +48,16 @@ export default class Map extends React.Component {
 
   static drawPlaces(places) {
     if (map.isInitialized() && places && places.length > 0) {
-      map.drawMarkers(places.map(p => ({
-        id: p.id,
-        latLng: {
-          lat: p.latitude,
-          lng: p.longitude
-        },
-        iconPath: GET_IMAGE_PATH[p.type]()
-      })));
+      map.drawMarkers(places);
       return true;
     }
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    if (prevState.placesDrawn) {
+      return null;
+    }
+
     const isDrawn = Map.drawPlaces(nextProps.places);
 
     if (isDrawn) {
@@ -83,16 +76,34 @@ export default class Map extends React.Component {
   }
 
   visibleMarkersChanged(markers) {
-    this.props.showArticles(markers.map(m => m.id));
+    this.props.showArticles(markers.map(m => m.data.id));
   }
 
   initializeMap() {
     map.render(this.refs['map']);
-    Map.drawPlaces(this.props.places);
+    const isDrawn = Map.drawPlaces(this.props.places);
+
+    if (isDrawn) {
+      this.setState({
+        placesDrawn: true
+      });
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.mapLoaded !== this.state.mapLoaded;
+  }
+
+  centerMap(latLng) {
+    if (this.state.mapLoaded) {
+      map.center(latLng);
+    }
+  }
+
+  toggleMarkerById(id) {
+    if (this.state.mapLoaded) {
+      map.toggleMarkerById(id);
+    }
   }
 
   render() {

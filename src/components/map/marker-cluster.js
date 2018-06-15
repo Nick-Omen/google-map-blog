@@ -761,6 +761,7 @@ MarkerClusterer.prototype.onAdd = function () {
         this.getMap().mapTypes[this.getMap().getMapTypeId()].maxZoom);
       zoom = Math.min(Math.max(zoom, minZoom), maxZoom);
 
+      // eslint-disable-next-line
       if (this.prevZoom_ != zoom) {
         this.prevZoom_ = zoom;
         this.resetViewport_(false);
