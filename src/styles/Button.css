@@ -1,0 +1,28 @@
+button {
+  border: none;
+  box-shadow: none;
+  outline: none;
+  cursor: pointer;
+}
+
+button:active,
+button:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.button {
+
+}
+
+.buttonIcon {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  margin: 0;
+}
+
+.buttonIcon:active,
+.buttonIcon:focus {
+
+}

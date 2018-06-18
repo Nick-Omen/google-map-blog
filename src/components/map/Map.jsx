@@ -17,6 +17,8 @@ export default class Map extends React.Component {
     className: PropTypes.string,
     places: PropTypes.arrayOf(PropTypes.shape(Place)),
 
+    mapWidth: PropTypes.number.isRequired,
+    mapHeight: PropTypes.number.isRequired,
     showArticles: PropTypes.func.isRequired,
     onRef: PropTypes.func.isRequired
   };
@@ -54,6 +56,10 @@ export default class Map extends React.Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
+    if (map.isInitialized()) {
+      map.setMapWidth(nextProps.mapWidth);
+      map.setMapHeight(nextProps.mapHeight);
+    }
     if (prevState.placesDrawn) {
       return null;
     }
@@ -76,7 +82,7 @@ export default class Map extends React.Component {
   }
 
   visibleMarkersChanged(markers) {
-    this.props.showArticles(markers.map(m => m.data.id));
+    this.props.showArticles(markers.map(m => m.data));
   }
 
   initializeMap() {
@@ -115,7 +121,7 @@ export default class Map extends React.Component {
     }
 
     return (
-      <div className={classnames(classes.map, className)} ref="map">Map</div>
+      <div className={classnames(classes.map, className)} ref="map" />
     );
   }
 }

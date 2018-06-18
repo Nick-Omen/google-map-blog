@@ -43,7 +43,9 @@ class App extends Component {
     return (
       <Provider store={reduxStore}>
         <div style={{ width: windowWidth, height: windowHeight }}>
-          <Home className={classes.home} />
+          <Home windowWidth={windowWidth}
+                windowHeight={windowHeight}
+                className={classes.home} />
           <Content className={classes.content}>
             <AppRoutes />
           </Content>

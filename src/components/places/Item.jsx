@@ -1,12 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classes from './Item.css';
+import buttonClasses from '../../styles/Button.css';
 import { Place } from '../../models/places';
+import classnames from 'classnames';
 
 export default class Item extends React.Component {
   static propTypes = {
     className: PropTypes.string,
     centerMap: PropTypes.func.isRequired,
+    toArticleDetails: PropTypes.func.isRequired,
     ...Place
   };
 
@@ -14,7 +17,15 @@ export default class Item extends React.Component {
     this.props.centerMap({
       lat: this.props.latitude,
       lng: this.props.longitude,
-    }, this.props.id);
+    }, {
+      id: this.props.id,
+      slug: this.props.slug,
+      title: this.props.title
+    });
+  }
+
+  readArticle() {
+    this.props.toArticleDetails(this.props.slug);
   }
 
   render() {
@@ -43,9 +54,12 @@ export default class Item extends React.Component {
               {description_short}
             </p>
             <div className={classes.footer}>
-              <button onClick={this.centerMap.bind(this)} className={classes.button}>
-                show on map
-              </button>
+              <button onClick={this.centerMap.bind(this)}
+                      className={classnames(buttonClasses.buttonIcon, classes.showOnMapButton)}
+                      title="Show pin on the map" />
+              <button onClick={this.readArticle.bind(this)}
+                      className={classnames(buttonClasses.buttonIcon, classes.readArticleButton)}
+                      title={`Read the article: ${title}`} />
             </div>
           </div>
         </article>

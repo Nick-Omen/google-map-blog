@@ -7,6 +7,7 @@ const initialState = {
   },
   toggle: {
     id: null,
+    slug: null,
     stamp: 0
   }
 };
@@ -28,7 +29,8 @@ export default createReducer({
   [toggleMapMarkerAction]: (state, payload) => ({
     ...state,
     toggle: {
-      id: payload,
+      id: payload.id,
+      slug: payload.slug,
       stamp: getStamp()
     }
   })

@@ -3,14 +3,21 @@ import { Redirect, Switch } from 'react-router-dom';
 import { Router } from 'react-router';
 import createHistory from 'history/createBrowserHistory';
 import AuthRedirect from './AuthRedirect'
-import PlacesPage from '../places'
+import { PlacesList, PlacesDetails } from '../places'
 
 const routeConfigs = [
   {
     path: '/',
     pageTitle: 'Explore my world',
     exact: true,
-    component: PlacesPage,
+    component: PlacesList,
+    requiresLogin: false,
+  },
+  {
+    path: '/article/:key/',
+    pageTitle: 'Explore my world',
+    exact: true,
+    component: PlacesDetails,
     requiresLogin: false,
   },
 ];

@@ -3,8 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Place } from '../../models/places';
 import { centerMapAction, toggleMapMarkerAction } from '../../reducers/map';
+import { openPlaceDetails } from '../../reducers/places';
 import { PlacesList, Controls } from '../../components/places';
 import classes from './List.css';
+import { push } from 'react-router-redux';
 
 class List extends React.Component {
   static propTypes = {
@@ -13,8 +15,12 @@ class List extends React.Component {
     centerMapOnMarker: PropTypes.func.isRequired,
   };
 
-  centerMap(latLng, id) {
-    this.props.centerMapOnMarker(latLng, id);
+  centerMap(latLng, marker) {
+    this.props.centerMapOnMarker(latLng, marker);
+  }
+
+  toArticleDetails(slug) {
+    this.props.pushToArticleDetails(slug);
   }
 
   render() {
@@ -25,7 +31,8 @@ class List extends React.Component {
       <div className={classes.list}>
         <Controls className={classes.listControls} />
 
-        <PlacesList places={p} centerMap={this.centerMap.bind(this)} />
+        <PlacesList places={p} centerMap={this.centerMap.bind(this)}
+                    toArticleDetails={this.toArticleDetails.bind(this)} />
       </div>
     );
   }
@@ -37,10 +44,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  centerMapOnMarker: (latLng, id) => dispatch([
+  centerMapOnMarker: (latLng, marker) => dispatch([
     centerMapAction(latLng),
-    toggleMapMarkerAction(id)
+    toggleMapMarkerAction(marker)
   ]),
+  pushToArticleDetails: payload => dispatch(push(`/article/${payload}/`))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(List);

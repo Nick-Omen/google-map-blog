@@ -7,6 +7,7 @@ export default props => (
     {props.places.map(p => <PlaceItem key={p.id}
                                       className={classes.listItem}
                                       centerMap={props.centerMap}
+                                      toArticleDetails={props.toArticleDetails}
                                       {...p} />)}
   </ul>
 );

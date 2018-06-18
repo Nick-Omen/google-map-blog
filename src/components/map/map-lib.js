@@ -1,6 +1,6 @@
 import { MarkerClusterer } from './marker-cluster';
-import article from './assets/article.svg';
-import photo from './assets/photo.svg';
+import article from './assets/pin.svg';
+import photo from './assets/pin.svg';
 
 /* global google */
 
@@ -9,13 +9,15 @@ const GET_IMAGE_PATH = {
   'article': () => article,
 };
 
+const MAP_ZOOM_TIMEOUT = 250;
+
 MarkerClusterer.IMAGE_PATH = process.env.PUBLIC_URL + 'cluster-images/m';
 
 const getPlaceInfoWindowContent = place => {
   let content = '<div style="width: 280px">';
   if (place.thumbnail) {
     content += '<div style="width: 280px; height: 210px; margin-bottom: 10px; ';
-    content += `background: url(${place.thumbnail}) center/contain no-repeat;"></div>`
+    content += `background: url(${place.thumbnail}) center/contain no-repeat;"></div>`;
   }
   content += place.title;
   content += '</div>';
@@ -32,10 +34,20 @@ export default class MapLib {
   map = null;
   clusters = null;
   infoWindow = null;
+  mapWidth = 0;
+  mapHeight = 0;
   markers = [];
 
   init() {
     this.onInit();
+  }
+
+  setMapWidth(width) {
+    this.mapWidth = width;
+  }
+
+  setMapHeight(height) {
+    this.mapHeight = height;
   }
 
   isInitialized() {
@@ -70,18 +82,73 @@ export default class MapLib {
     this.visibleMarkersChanged(markers);
   }
 
+  _getZoomByBounds(bounds) {
+    const MAX_ZOOM = this.map.mapTypes.get(this.map.getMapTypeId()).maxZoom || 21;
+    const MIN_ZOOM = this.map.mapTypes.get(this.map.getMapTypeId()).minZoom || 0;
+
+    const ne = this.map.getProjection().fromLatLngToPoint(bounds.getNorthEast());
+    const sw = this.map.getProjection().fromLatLngToPoint(bounds.getSouthWest());
+
+    const worldCoordWidth = Math.abs(ne.x - sw.x);
+    const worldCoordHeight = Math.abs(ne.y - sw.y);
+
+    //Fit padding in pixels
+    const FIT_PAD = 40;
+
+    for (let zoom = MAX_ZOOM; zoom >= MIN_ZOOM; --zoom) {
+      if (worldCoordWidth * (1 << zoom) + 2 * FIT_PAD < this.mapWidth &&
+        worldCoordHeight * (1 << zoom) + 2 * FIT_PAD < this.mapHeight)
+        return zoom;
+    }
+    return 0;
+  }
+
+  _getMarkersLatLngBounds(markers) {
+    const latLngBounds = new google.maps.LatLngBounds();
+    markers.forEach(m => latLngBounds.extend(m.getPosition()));
+    return latLngBounds;
+  }
+
   _fitToMarkers(markers = null) {
     if (!markers) {
       markers = this.markers;
     }
-    const latLngBounds = new google.maps.LatLngBounds();
-    markers.forEach(m => latLngBounds.extend(m.getPosition()));
-    this.map.fitBounds(latLngBounds);
+    this.map.fitBounds(this._getMarkersLatLngBounds(markers));
+  }
+
+  _smoothZoom(newZoom, cb) {
+    const currentZoom = this.map.getZoom();
+
+    if (newZoom > currentZoom) {
+      let i = 1;
+      let steps = Math.round(Math.abs((currentZoom + 2 - newZoom)) / 2);
+
+      for (let z = currentZoom + 2; z <= newZoom; z += 2) {
+        const k = i;
+        setTimeout(() => {
+          this.map.setZoom(z);
+          if (k >= steps) {
+            setTimeout(() => {
+              cb();
+            }, MAP_ZOOM_TIMEOUT);
+          }
+        }, MAP_ZOOM_TIMEOUT * i);
+        i++;
+      }
+    } else {
+      cb();
+    }
   }
 
   _onClusterClick(c) {
     const markers = c.getMarkers();
-    this._fitToMarkers(markers);
+    const newBounds = this._getMarkersLatLngBounds(markers);
+    const newCenter = newBounds.getCenter();
+
+    this.map.panTo(newCenter);
+    this._smoothZoom(this._getZoomByBounds(newBounds), () => {
+      this.map.fitBounds(newBounds);
+    });
   }
 
   _openInfoWindow(marker) {
@@ -116,12 +183,12 @@ export default class MapLib {
   toggleMarkerById(id) {
     const marker = this.markers.find(m => m.data.id === id);
     if (marker) {
-      this.zoom(13);
+      this.zoom(15);
       marker.setAnimation(google.maps.Animation.BOUNCE);
       this.visibleMarkersChanged([marker]);
       setTimeout(() => {
         marker.setAnimation(null);
-      }, 200);
+      }, 2100); // Bounce 3 times
     }
   }
 
